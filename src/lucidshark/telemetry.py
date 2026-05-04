@@ -30,8 +30,8 @@ from typing import Any, Dict, Optional
 LOGGER = logging.getLogger(__name__)
 
 # PostHog project API key (public, safe to embed - this is a write-only key)
-_POSTHOG_API_KEY = "phc_jQ0TDwA4tX7DkP5Rf1Pmr6mu9mPgtNmYh2QYkFjNmWP"
-_POSTHOG_HOST = "https://us.i.posthog.com"
+_POSTHOG_API_KEY = os.environ.get("LUCIDSHARK_POSTHOG_API_KEY", "phc_jQ0TDwA4tX7DkP5Rf1Pmr6mu9mPgtNmYh2QYkFjNmWP")
+_POSTHOG_HOST = os.environ.get("LUCIDSHARK_POSTHOG_HOST", "https://us.i.posthog.com")
 
 _telemetry_client: Optional[Any] = None
 _anonymous_id: Optional[str] = None
