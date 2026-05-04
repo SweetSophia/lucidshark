@@ -14,7 +14,7 @@ pyinstaller lucidshark.spec --clean
 ./dist/lucidshark --version   # Verify it built
 ```
 
-Binary lands at `dist/lucidshark`. Always use `./dist/lucidshark` (or `./lucidshark` after install) to test the binary, not `python -m`.
+Binary lands at `dist/lucidshark`. Always use `./dist/lucidshark` (or `lucidshark` after `pip install -e .`) to test the binary, not `python -m`.
 
 ## Version Source of Truth
 
@@ -83,21 +83,24 @@ For language tools (ruff, eslint, mypy, etc.), LucidShark uses whatever is insta
 
 **Scans only changed files by default** (uncommitted changes). Use `--all-files` for full project scans:
 ```bash
-./lucidshark scan --all --all-files   # Full scan
-./lucidshark scan --linting           # Changed files only (default)
+lucidshark scan --all --all-files   # Full scan (after pip install -e .)
+./dist/lucidshark scan --all --all-files   # Or use the built binary
 ```
 
 `--base-branch` filters results to files changed since a branch (full analysis runs; only reporting is filtered).
 
 ## Strict Mode
 
-LucidShark runs in strict mode by default (`settings.strict_mode: true`): every configured tool must run successfully. A missing or failing tool causes a HIGH-severity issue and scan failure. This is configurable per-tool via `mandatory: false`.
+LucidShark runs in strict mode by default (`settings.strict_mode: true`): every configured tool must run successfully. A missing or failing tool causes a HIGH-severity issue and scan failure.
+
+**Note:** `mandatory: false` only has an effect when strict mode is *disabled*. In strict mode, all non-informational skips (missing tool, failed execution, no applicable files) are treated as mandatory regardless of per-tool settings. `EXECUTION_FAILED` is always mandatory.
 
 ## Quality Overview
 
 ```bash
-./lucidshark scan --all --all-files                          # Must run full scan first
-./lucidshark overview --update                               # Generates QUALITY.md
+lucidshark scan --all --all-files            # Must run full scan first (pip install -e .)
+./dist/lucidshark scan --all --all-files    # Or use the built binary
+lucidshark overview --update                 # Generates QUALITY.md
 ```
 
 The overview reads cached results from `.lucidshark/last-scan.json`. **It will reject partial/incremental scans** — the scan must have used `--all-files`.
