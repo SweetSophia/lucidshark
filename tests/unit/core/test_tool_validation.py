@@ -320,7 +320,10 @@ class TestFormatValidationErrors:
             )
         ]
         output = format_validation_errors(errors)
-        assert "trivy" in output.lower() or "automatically" in output.lower()
+        # Verify all managed tools are listed (not just a hardcoded subset)
+        for tool in sorted(AUTO_DOWNLOADABLE_TOOLS):
+            assert tool in output, f"{tool} should be listed in the auto-download note"
+        assert "automatically" in output
 
     def test_handles_missing_install_instruction(self):
         """Errors without install instructions are handled."""

@@ -31,6 +31,7 @@ AUTO_DOWNLOADABLE_TOOLS = frozenset(
         "trivy",
         "opengrep",
         "checkov",
+        "gosec",
         "duplo",
         "pmd",
         "checkstyle",
@@ -51,7 +52,7 @@ INSTALL_INSTRUCTIONS: Dict[str, str] = {
     "pyright": "pip install pyright",
     "typescript": "npm install -g typescript",
     "cargo_check": "Included with Rust toolchain (rustup)",
-    # Note: spotbugs is now a managed tool (auto-downloaded) and not listed here
+    # Note: gosec and spotbugs are managed tools (auto-downloaded) and not listed here
     # Test runners
     "pytest": "pip install pytest",
     "jest": "npm install jest",
@@ -170,7 +171,7 @@ def validate_configured_tools(
     """Validate all configured tools are available.
 
     Only validates tools explicitly configured in lucidshark.yml.
-    Skips auto-downloadable tools (trivy, opengrep, checkov, duplo).
+    Skips tools that are auto-downloaded (managed tools). See AUTO_DOWNLOADABLE_TOOLS.
 
     Args:
         config: LucidShark configuration.
@@ -242,11 +243,9 @@ def format_validation_errors(errors: List[ToolValidationError]) -> str:
 
     lines.append("Please install the missing tools and try again.")
     lines.append("")
+    managed = sorted(AUTO_DOWNLOADABLE_TOOLS)
     lines.append(
-        "Note: Security tools (trivy, opengrep, checkov), duplo, pmd, checkstyle,"
-    )
-    lines.append(
-        "and spotbugs are downloaded automatically - no manual installation required."
+        f"Note: {', '.join(managed)} are downloaded automatically - no manual installation required."
     )
 
     return "\n".join(lines)
