@@ -31,6 +31,7 @@ AUTO_DOWNLOADABLE_TOOLS = frozenset(
         "trivy",
         "opengrep",
         "checkov",
+        "gosec",
         "duplo",
         "pmd",
         "checkstyle",
@@ -51,7 +52,7 @@ INSTALL_INSTRUCTIONS: Dict[str, str] = {
     "pyright": "pip install pyright",
     "typescript": "npm install -g typescript",
     "cargo_check": "Included with Rust toolchain (rustup)",
-    # Note: spotbugs is now a managed tool (auto-downloaded) and not listed here
+    # Note: gosec, spotbugs are managed tools (auto-downloaded) and not listed here
     # Test runners
     "pytest": "pip install pytest",
     "jest": "npm install jest",
