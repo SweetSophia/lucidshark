@@ -32,7 +32,6 @@ class ConfigBridge:
         # Domain toggles - only set if explicitly provided on CLI
         # Use getattr with defaults for subcommand compatibility
         scanners: Dict[str, Dict[str, Any]] = {}
-        linters: Dict[str, Dict[str, Any]] = {}
 
         sca = getattr(args, "sca", False)
         sast = getattr(args, "sast", False)
@@ -53,8 +52,6 @@ class ConfigBridge:
             scanners["iac"] = {"enabled": True}
         if container:
             scanners["container"] = {"enabled": True}
-        if linting:
-            linters["ruff"] = {"enabled": True}
 
         # Container images go into container scanner options
         if images:
@@ -66,8 +63,11 @@ class ConfigBridge:
         if scanners:
             overrides["scanners"] = scanners
 
-        if linters:
-            overrides["linters"] = linters
+        # Enable linting domain when --linting flag is passed.
+        # Tools are determined by the existing config or auto-detection,
+        # not hardcoded to a single tool.
+        if linting:
+            overrides.setdefault("pipeline", {})["linting"] = {"enabled": True}
 
         # Fix mode for linting
         if fix:
