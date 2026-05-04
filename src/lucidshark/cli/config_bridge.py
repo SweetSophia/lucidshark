@@ -66,8 +66,9 @@ class ConfigBridge:
         if scanners:
             overrides["scanners"] = scanners
 
+        # Place linting under pipeline.linting with proper list format for dict_to_config
         if linters:
-            overrides["linters"] = linters
+            overrides.setdefault("pipeline", {})["linting"] = {"enabled": True, "tools": [{"name": "ruff"}]}
 
         # Fix mode for linting
         if fix:
